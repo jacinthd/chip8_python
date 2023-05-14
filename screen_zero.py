@@ -7,7 +7,8 @@ import sys
 import numpy as np
 import sdl2
 import sdl2.ext
-import hex_digit_sprites
+
+from sprites import hex_digit_sprites
 
 WHITE_VALUE = 16777215  # 2^24 - 1
 WHITE = sdl2.ext.Color(255, 255, 255)
@@ -42,13 +43,13 @@ def hex_sprite_to_array(hex_sprite):
 
 
 def run():
-    sdl2.ext.init()
-    window = sdl2.ext.Window("chip8 display", size=(640, 320))
-
     pixel_zero = hex_sprite_to_array(hex_digit_sprites.zero)
     pixel_zero_zoomed = np.repeat(pixel_zero, 10, axis=1)  # stretch horizontally
     pixel_zero_zoomed = np.repeat(pixel_zero_zoomed, 10, axis=0)  # stretch vertically
     pixel_vertical, pixel_horizontal = pixel_zero_zoomed.shape
+
+    sdl2.ext.init()
+    window = sdl2.ext.Window("chip8 display", size=(640, 320))
 
     window_surface = sdl2.ext.pixels2d(window.get_surface())
     window_surface[:pixel_vertical, :pixel_horizontal] = pixel_zero_zoomed * WHITE_VALUE
